@@ -1,0 +1,89 @@
+Parameters:
+  MinhaVPC:
+    Description: VPC para trabalhar
+    Type: AWS::EC2::VPC::Id
+  Subnet:
+    Description: Subnet da Ec2
+    Type: AWS::EC2::Subnet::Id
+  InstanceName:
+    Description: Nome da Instancia
+    Type: String
+  SGSubnet:
+    Description: Escolha o Security Group da Subnet
+    Type: AWS::EC2::SecurityGroup::Id
+  TipodeInstancia:
+    Description: Maquina com WebServer
+    Type: String
+    Default: t3.medium
+    AllowedValues:
+      - t2.nano
+      - t2.micro
+      - t2.small
+      - t2.medium
+      - t2.large
+      - t2.xlarge
+      - t2.2xlarge
+      - t3.nano
+      - t3.micro
+      - t3.small
+      - t3.medium
+      - t3.large
+      - t3.xlarge
+      - t3.2xlarge
+      - m5.large
+      - m5.xlarge
+      - m5.2xlarge
+      - m5.4xlarge
+      - m5.8xlarge
+      - m5.12xlarge
+      - m5.16xlarge
+      - m5.24xlarge
+      - c5.large
+      - c5.xlarge
+      - c5.2xlarge
+      - c5.4xlarge
+      - c5.8xlarge
+      - c5.12xlarge
+      - c5.16xlarge
+      - c5.24xlarge
+
+Resources: 
+  myEC2Instance:
+    Type: AWS::EC2::Instance
+    Properties:
+      ImageId: ami-087855b6c8b59a9e4
+      InstanceType: !Ref TipodeInstancia
+      SecurityGroupIds: 
+        - sg-0c27903626c8da2df
+        - !Ref MeuSG
+        - !Ref SGSubnet
+      SubnetId: !Ref Subnet
+      Tags:
+        - Key: Name
+          Value: !Ref InstanceName
+        - Key: env
+          Value: prod
+        - Key: billing_group
+          Value: default
+        - Key: severity
+          Value: high
+        - Key: comment
+          Value: ''
+        - Key: managed_poweroff
+          Value: false
+        - Key: managed_poweron
+          Value: false
+        - Key: os
+          Value: windows
+        - Key: role
+          Value: ''
+        - Key: project
+          Value: ''
+  MeuSG:
+    Type: "AWS::EC2::SecurityGroup"
+    Properties:
+      GroupName: !Sub
+        - SG-${Nome}
+        - { Nome: !Ref InstanceName}
+      GroupDescription: Grupo de seguranca para maquina em especifico.
+      VpcId: !Ref MinhaVPC

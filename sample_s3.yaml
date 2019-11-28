@@ -1,0 +1,6 @@
+Resources:
+  mestrepinpax:
+    Type: AWS::S3::Bucket
+    Properties:
+      BucketName: mestrepinpaxs
+      AccessControl: PublicRead

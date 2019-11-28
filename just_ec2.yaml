@@ -1,0 +1,44 @@
+---
+Resources:
+  MyInstance:
+    Type: AWS::EC2::Instance
+    Properties:
+       AvailabilityZone: us-east-1a
+       ImageId: ami-00068cd7555f543d5
+       InstanceType: t3.micro
+       SecurityGroups:
+         - !Ref SSHSecurityGroup
+         - !Ref ServerSecurityGroup
+
+  # Elastic IP Para instancia
+  MyEIP:
+    Type: AWS::EC2::EIP
+    Properties:
+       InstanceId: !Ref MyInstance
+
+  # Nossos Security Group
+  SSHSecurityGroup:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupDescription: Habilitar Acesso SSH via porta 22
+      SecurityGroupIngress:
+      - CidrIp: 0.0.0.0/0
+        FromPort: 22
+        IpProtocol: tcp
+        ToPort: 22
+
+  # Nosso Segundo Security Group
+  ServerSecurityGroup:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupDescription: Permite conexoes de ranges especificos
+      SecurityGroupIngress:
+      - IpProtocol: tcp
+        FromPort: 80
+        ToPort: 80
+        CidrIp: 0.0.0.0/0
+      - IpProtocol: tcp
+        FromPort: 22
+        ToPort: 22
+        CidrIp: 192.168.1.1/32
+
