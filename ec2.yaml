@@ -1,16 +1,14 @@
 Parameters:
-  MinhaVPC:
-    Description: VPC para trabalhar
-    Type: AWS::EC2::VPC::Id
+  DBpwd:
+    Description: Senha do Banco de dados
+    Type: String
+    NoEcho: true
   Subnet:
     Description: Subnet da Ec2
     Type: AWS::EC2::Subnet::Id
   InstanceName:
     Description: Nome da Instancia
     Type: String
-  SGSubnet:
-    Description: Escolha o Security Group da Subnet
-    Type: AWS::EC2::SecurityGroup::Id
   TipodeInstancia:
     Description: Maquina com WebServer
     Type: String
@@ -57,5 +55,12 @@ Resources:
       Tags:
         - Key: Name
           Value: !Ref InstanceName
-      "UserData" : Fn::Base64
-
+      "UserData" : 
+        Fn::Base64:
+          !Sub |
+          #!/bin/bash
+          apt-get update
+          apt-get install apache2 -y
+          apt-get install mysql-server -y
+          service apache2 start
+          service mysqld stop
