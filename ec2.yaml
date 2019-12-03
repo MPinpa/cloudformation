@@ -53,37 +53,9 @@ Resources:
     Properties:
       ImageId: ami-087855b6c8b59a9e4
       InstanceType: !Ref TipodeInstancia
-      SecurityGroupIds: 
-        - sg-0c27903626c8da2df
-        - !Ref MeuSG
-        - !Ref SGSubnet
       SubnetId: !Ref Subnet
       Tags:
         - Key: Name
           Value: !Ref InstanceName
-        - Key: env
-          Value: prod
-        - Key: billing_group
-          Value: default
-        - Key: severity
-          Value: high
-        - Key: comment
-          Value: ''
-        - Key: managed_poweroff
-          Value: false
-        - Key: managed_poweron
-          Value: false
-        - Key: os
-          Value: windows
-        - Key: role
-          Value: ''
-        - Key: project
-          Value: ''
-  MeuSG:
-    Type: "AWS::EC2::SecurityGroup"
-    Properties:
-      GroupName: !Sub
-        - SG-${Nome}
-        - { Nome: !Ref InstanceName}
-      GroupDescription: Grupo de seguranca para maquina em especifico.
-      VpcId: !Ref MinhaVPC
+      "UserData" : Fn::Base64
+
